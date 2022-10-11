@@ -1,7 +1,8 @@
 from email.policy import default
 from enum import unique
+from os import access
 from django.db import models
-
+from rest_framework_simplejwt.tokens import RefreshToken
 # Create your models here.
 
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
@@ -48,7 +49,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def tokens(self):
-        return ''
+        refresh = RefreshToken.for_user(self)
+
+        return {
+            'refresh' : str(refresh),
+            'access' : str(refresh.access_token)
+        }
   
 
 
